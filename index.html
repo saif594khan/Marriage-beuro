@@ -482,210 +482,210 @@
     <div id="toast" class="toast">Text copied to clipboard!</div>
 
     <script>
-        function previewImage(event) {
-            const file = event.target.files[0];
-            const imgPreview = document.getElementById('imgPreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    imgPreview.src = e.target.result;
-                    imgPreview.classList.remove('hidden');
-                }
-                reader.readAsDataURL(file);
-            } else {
-                imgPreview.src = '';
-                imgPreview.classList.add('hidden');
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const imgPreview = document.getElementById('imgPreview');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imgPreview.src = e.target.result;
+                imgPreview.classList.remove('hidden');
             }
+            reader.readAsDataURL(file);
+        } else {
+            imgPreview.src = '';
+            imgPreview.classList.add('hidden');
+        }
+    }
+
+    function handleQualificationChange() {
+        const qualification = document.getElementById('qualification').value;
+        const otherQualificationGroup = document.getElementById('otherQualificationGroup');
+        const otherQualificationInput = document.getElementById('otherQualification');
+
+        if (qualification === 'other') {
+            otherQualificationGroup.classList.remove('hidden');
+        } else {
+            otherQualificationGroup.classList.add('hidden');
+            otherQualificationInput.value = '';
+        }
+    }
+
+    function handleGenderChange() {
+        const gender = document.getElementById('gender').value;
+        const workTypeGroup = document.getElementById('workTypeGroup');
+        const workTypeSelect = document.getElementById('workType');
+        const occupationLabel = document.getElementById('occupationLabel');
+        const occupationInput = document.getElementById('occupation');
+
+        if (gender === 'male') {
+            workTypeGroup.classList.remove('hidden');
+        } else {
+            workTypeGroup.classList.add('hidden');
+            workTypeSelect.value = '';
+            occupationLabel.innerText = "Occupation / Job Title";
+            occupationInput.placeholder = "e.g. Software Engineer, Business";
+        }
+    }
+
+    function handleWorkTypeChange() {
+        const workType = document.getElementById('workType').value;
+        const occupationLabel = document.getElementById('occupationLabel');
+        const occupationInput = document.getElementById('occupation');
+
+        if (workType === 'business') {
+            occupationLabel.innerText = "Describe your business";
+            occupationInput.placeholder = "Enter details about your business";
+        } else {
+            occupationLabel.innerText = "Job title";
+            occupationInput.placeholder = "Enter your job title";
+        }
+    }
+
+    function handleParentsStatusChange() {
+        const parentsStatus = document.getElementById('parentsStatus').value;
+        const motherOccupationGroup = document.getElementById('motherOccupationGroup');
+        const motherOccupationSelect = document.getElementById('motherOccupation');
+        const motherJobDetailsGroup = document.getElementById('motherJobDetailsGroup');
+        const motherJobDetailsInput = document.getElementById('motherJobDetails');
+
+        if (parentsStatus === 'father alive') {
+            motherOccupationGroup.classList.add('hidden');
+            motherOccupationSelect.value = '';
+
+            motherJobDetailsGroup.classList.add('hidden');
+            motherJobDetailsInput.value = '';
+        } else {
+            motherOccupationGroup.classList.remove('hidden');
+        }
+    }
+
+    function handleMotherOccupationChange() {
+        const motherOccupation = document.getElementById('motherOccupation').value;
+        const motherJobDetailsGroup = document.getElementById('motherJobDetailsGroup');
+        const motherJobDetailsInput = document.getElementById('motherJobDetails');
+
+        if (motherOccupation === 'job') {
+            motherJobDetailsGroup.classList.remove('hidden');
+        } else {
+            motherJobDetailsGroup.classList.add('hidden');
+            motherJobDetailsInput.value = '';
+        }
+    }
+
+    function buildFormattedMessage() {
+        const getValue = (id) => document.getElementById(id) ? document.getElementById(id).value.trim() : '';
+
+        const gender = getValue('gender');
+        const fullName = getValue('fullName');
+        const fatherName = getValue('fatherName');
+        const surname = getValue('surname');
+        const maritalStatus = getValue('maritalStatus');
+        const age = getValue('age');
+        const heightFt = getValue('height_ft');
+        const heightIn = getValue('height_in');
+        
+        let qualification = getValue('qualification');
+        if (qualification === 'other') {
+            qualification = getValue('otherQualification') || 'Other';
         }
 
-        function handleQualificationChange() {
-            const qualification = document.getElementById('qualification').value;
-            const otherQualificationGroup = document.getElementById('otherQualificationGroup');
-            const otherQualificationInput = document.getElementById('otherQualification');
+        const occupationLabel = document.getElementById('occupationLabel').innerText;
+        const occupation = getValue('occupation');
+        const location = getValue('location');
+        const city = getValue('city');
+        const residence = getValue('residence');
 
-            if (qualification === 'other') {
-                otherQualificationGroup.classList.remove('hidden');
-            } else {
-                otherQualificationGroup.classList.add('hidden');
-                otherQualificationInput.value = '';
-            }
+        const parentsStatus = getValue('parentsStatus');
+        const fatherOccupation = getValue('fatherOccupation');
+        const motherOccupation = getValue('motherOccupation');
+        const motherJobDetails = getValue('motherJobDetails');
+        const siblingsCount = getValue('siblingsCount');
+        const siblingsMarriedCount = getValue('siblingsMarriedCount');
+
+        let message = `✧･ﾟ: *✧･ﾟ:* 𝒲𝒶𝒻𝒶 𝒦ℯ ℬ𝒶𝓃𝒹𝒽𝒶𝓃 *:･ﾟ✧*:･ﾟ✧\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `📋 *REGISTRATION PROFILE*\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+        message += `👤 *Personal Details*\n`;
+        if (gender) message += `Gender: *${gender}*\n`;
+        if (fullName) message += `Full Name: *${fullName}*\n`;
+        if (fatherName) message += `Father's Name: *${fatherName}*\n`;
+        if (surname) message += `Surname / Cast: *${surname}*\n`;
+        if (maritalStatus) message += `Marital Status: *${maritalStatus}*\n`;
+        if (age) message += `Age: *${age}*\n`;
+        if (heightFt || heightIn) message += `Height: *${heightFt || 0} ft, ${heightIn || 0} in*\n`;
+        if (qualification) message += `Highest Qualification: *${qualification}*\n`;
+        if (occupation) message += `${occupationLabel}: *${occupation}*\n`;
+        if (location) message += `Residential Area: *${location}*\n`;
+        if (city) message += `City / Village: *${city}*\n`;
+        if (residence) message += `Residence Type: *${residence}*\n`;
+
+        message += `\n👨‍👩‍👧‍👦 *Family Details*\n`;
+        if (parentsStatus) message += `Parents Status: *${parentsStatus}*\n`;
+        if (fatherOccupation) message += `Father's Occupation: *${fatherOccupation}*\n`;
+        if (motherOccupation) message += `Mother's Occupation: *${motherOccupation}*\n`;
+        if (motherJobDetails) message += `Mother's Job Details: *${motherJobDetails}*\n`;
+        if (siblingsCount) message += `Total Siblings: *${siblingsCount}*\n`;
+        if (siblingsMarriedCount) message += `Married Siblings: *${siblingsMarriedCount}*\n`;
+
+        return message;
+    }
+
+    function showToast(text) {
+        const toast = document.getElementById('toast');
+        toast.innerText = text;
+        toast.className = "toast show";
+        setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+
+    async function copyProfileText() {
+        const message = buildFormattedMessage();
+        try {
+            await navigator.clipboard.writeText(message);
+            showToast("Profile text copied to clipboard!");
+        } catch (err) {
+            const textArea = document.createElement("textarea");
+            textArea.value = message;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            showToast("Profile text copied!");
         }
+    }
 
-        function handleGenderChange() {
-            const gender = document.getElementById('gender').value;
-            const workTypeGroup = document.getElementById('workTypeGroup');
-            const workTypeSelect = document.getElementById('workType');
-            const occupationLabel = document.getElementById('occupationLabel');
-            const occupationInput = document.getElementById('occupation');
+    async function shareToWhatsApp() {
+        const message = buildFormattedMessage();
+        const fileInput = document.getElementById('profilePic');
+        const file = fileInput.files ? fileInput.files[0] : null;
 
-            if (gender === 'male') {
-                workTypeGroup.classList.remove('hidden');
-            } else {
-                workTypeGroup.classList.add('hidden');
-                workTypeSelect.value = '';
-                occupationLabel.innerText = "Occupation / Job Title";
-                occupationInput.placeholder = "e.g. Software Engineer, Business";
-            }
-        }
+        // Copy profile text to clipboard first as a reliable backup
+        try {
+            await navigator.clipboard.writeText(message);
+        } catch (err) {}
 
-        function handleWorkTypeChange() {
-            const workType = document.getElementById('workType').value;
-            const occupationLabel = document.getElementById('occupationLabel');
-            const occupationInput = document.getElementById('occupation');
-
-            if (workType === 'business') {
-                occupationLabel.innerText = "Describe your business";
-                occupationInput.placeholder = "Enter details about your business";
-            } else {
-                occupationLabel.innerText = "Job title";
-                occupationInput.placeholder = "Enter your job title";
-            }
-        }
-
-        function handleParentsStatusChange() {
-            const parentsStatus = document.getElementById('parentsStatus').value;
-            const motherOccupationGroup = document.getElementById('motherOccupationGroup');
-            const motherOccupationSelect = document.getElementById('motherOccupation');
-            const motherJobDetailsGroup = document.getElementById('motherJobDetailsGroup');
-            const motherJobDetailsInput = document.getElementById('motherJobDetails');
-
-            if (parentsStatus === 'father alive') {
-                motherOccupationGroup.classList.add('hidden');
-                motherOccupationSelect.value = '';
-
-                motherJobDetailsGroup.classList.add('hidden');
-                motherJobDetailsInput.value = '';
-            } else {
-                motherOccupationGroup.classList.remove('hidden');
-            }
-        }
-
-        function handleMotherOccupationChange() {
-            const motherOccupation = document.getElementById('motherOccupation').value;
-            const motherJobDetailsGroup = document.getElementById('motherJobDetailsGroup');
-            const motherJobDetailsInput = document.getElementById('motherJobDetails');
-
-            if (motherOccupation === 'job') {
-                motherJobDetailsGroup.classList.remove('hidden');
-            } else {
-                motherJobDetailsGroup.classList.add('hidden');
-                motherJobDetailsInput.value = '';
-            }
-        }
-
-        function buildFormattedMessage() {
-            const getValue = (id) => document.getElementById(id) ? document.getElementById(id).value.trim() : '';
-
-            const gender = getValue('gender');
-            const fullName = getValue('fullName');
-            const fatherName = getValue('fatherName');
-            const surname = getValue('surname');
-            const maritalStatus = getValue('maritalStatus');
-            const age = getValue('age');
-            const heightFt = getValue('height_ft');
-            const heightIn = getValue('height_in');
-            
-            let qualification = getValue('qualification');
-            if (qualification === 'other') {
-                qualification = getValue('otherQualification') || 'Other';
-            }
-
-            const occupationLabel = document.getElementById('occupationLabel').innerText;
-            const occupation = getValue('occupation');
-            const location = getValue('location');
-            const city = getValue('city');
-            const residence = getValue('residence');
-
-            const parentsStatus = getValue('parentsStatus');
-            const fatherOccupation = getValue('fatherOccupation');
-            const motherOccupation = getValue('motherOccupation');
-            const motherJobDetails = getValue('motherJobDetails');
-            const siblingsCount = getValue('siblingsCount');
-            const siblingsMarriedCount = getValue('siblingsMarriedCount');
-
-            let message = `✧･ﾟ: *✧･ﾟ:* 𝒲𝒶𝒻𝒶 𝒦ℯ ℬ𝒶𝓃𝒹𝒽𝒶𝓃 *:･ﾟ✧*:･ﾟ✧\n`;
-            message += `━━━━━━━━━━━━━━━━━━━━━\n`;
-            message += `📋 *REGISTRATION PROFILE*\n`;
-            message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-            message += `👤 *Personal Details*\n`;
-            if (gender) message += `Gender: *${gender}*\n`;
-            if (fullName) message += `Full Name: *${fullName}*\n`;
-            if (fatherName) message += `Father's Name: *${fatherName}*\n`;
-            if (surname) message += `Surname / Cast: *${surname}*\n`;
-            if (maritalStatus) message += `Marital Status: *${maritalStatus}*\n`;
-            if (age) message += `Age: *${age}*\n`;
-            if (heightFt || heightIn) message += `Height: *${heightFt || 0} ft, ${heightIn || 0} in*\n`;
-            if (qualification) message += `Highest Qualification: *${qualification}*\n`;
-            if (occupation) message += `${occupationLabel}: *${occupation}*\n`;
-            if (location) message += `Residential Area: *${location}*\n`;
-            if (city) message += `City / Village: *${city}*\n`;
-            if (residence) message += `Residence Type: *${residence}*\n`;
-
-            message += `\n👨‍👩‍👧‍👦 *Family Details*\n`;
-            if (parentsStatus) message += `Parents Status: *${parentsStatus}*\n`;
-            if (fatherOccupation) message += `Father's Occupation: *${fatherOccupation}*\n`;
-            if (motherOccupation) message += `Mother's Occupation: *${motherOccupation}*\n`;
-            if (motherJobDetails) message += `Mother's Job Details: *${motherJobDetails}*\n`;
-            if (siblingsCount) message += `Total Siblings: *${siblingsCount}*\n`;
-            if (siblingsMarriedCount) message += `Married Siblings: *${siblingsMarriedCount}*\n`;
-
-            return message;
-        }
-
-        function showToast(text) {
-            const toast = document.getElementById('toast');
-            toast.innerText = text;
-            toast.className = "toast show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-        }
-
-        async function copyProfileText() {
-            const message = buildFormattedMessage();
+        // IF AN IMAGE IS ATTACHED: Use native Web Share API for the image file
+        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
             try {
-                await navigator.clipboard.writeText(message);
-                showToast("Profile text copied to clipboard!");
+                showToast("Text copied! Paste it in WhatsApp caption.");
+                await navigator.share({
+                    files: [file],
+                    title: 'Wafa Ke Bandhan Profile'
+                });
+                return;
             } catch (err) {
-                // Fallback for older devices
-                const textArea = document.createElement("textarea");
-                textArea.value = message;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand("copy");
-                document.body.removeChild(textArea);
-                showToast("Profile text copied!");
+                console.log("Share cancelled or failed:", err);
             }
         }
 
-        async function shareToWhatsApp() {
-            const message = buildFormattedMessage();
-            const fileInput = document.getElementById('profilePic');
-            const file = fileInput.files[0];
-
-            // Copy text automatically as fallback
-            try {
-                await navigator.clipboard.writeText(message);
-            } catch (err) {}
-
-            // Direct File + Text Share via Web Share API
-            if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Wafa Ke Bandhan Profile',
-                        text: message
-                    });
-                    return;
-                } catch (err) {
-                    console.log("Share cancelled or failed:", err);
-                }
-            }
-
-            // Fallback: Open URL directly with text pre-filled
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
-    </script>
+        // IF NO IMAGE IS ATTACHED (or share failed): Use direct WhatsApp web API
+        // This guarantees text is pre-filled without any empty message error!
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+</script>
 
 </body>
 
