@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wafa Ke Bandhan - Registration Form</title>
+    <!-- Calligraphy Font for Bureau Name -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Stylish Calligraphy Header */
+        h1 {
+            text-align: center;
+            color: #8b0000;
+            margin-bottom: 8px;
+            font-family: 'Great Vibes', cursive;
+            font-size: 48px;
+            font-weight: normal;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        fieldset {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fafafa;
+        }
+
+        legend {
+            font-weight: bold;
+            color: #8b0000;
+            padding: 0 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        input,
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #8b0000;
+        }
+
+        /* Height specific field design */
+        .height-input-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .height-input-container input {
+            width: 50px;
+            text-align: center;
+        }
+
+        /* Action Buttons Grid */
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        .copy-btn {
+            background-color: #4a5568;
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background-color: #2d3748;
+        }
+
+        .share-btn {
+            background-color: #8b0000;
+            color: white;
+        }
+
+        .share-btn:hover {
+            background-color: #660000;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .preview-img {
+            max-width: 150px;
+            max-height: 150px;
+            margin-top: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            object-fit: cover;
+        }
+
+        /* Toast notification */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #2e7d32;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from { bottom: 0; opacity: 0; }
+            to { bottom: 30px; opacity: 1; }
+        }
+
+        @keyframes fadeout {
+            from { bottom: 30px; opacity: 1; }
+            to { bottom: 0; opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+                margin: 5px auto;
+            }
+            h1 {
+                font-size: 36px;
+            }
+            .btn-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Wafa Ke Bandhan</h1>
+        <p class="subtitle">Please fill in your details accurately to help us find a suitable match.</p>
+
+        <form id="profileForm" onsubmit="event.preventDefault();">
+
+            <!-- Personal Details Fieldset -->
+            <fieldset>
+                <legend>Personal Details</legend>
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" onchange="handleGenderChange()">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="Enter full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fatherName">Father's Name</label>
+                        <input type="text" id="fatherName" name="fatherName" placeholder="Enter father's name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="surname">Surname / Cast</label>
+                        <input type="text" id="surname" name="surname" placeholder="Enter surname">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maritalStatus">Marital Status</label>
+                        <select id="maritalStatus" name="maritalStatus">
+                            <option value="">Select Status</option>
+                            <option value="single">Single / Never Married</option>
+                            <option value="married">Married</option>
+                            <option value="divorced">Divorced</option>
+                            <option value="widowed">Widowed</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">Select your age:</label>
+                        <select id="age" name="age">
+                            <option value="" disabled selected>Choose an age</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                            <option value="32">32</option>
+                            <option value="33">33</option>
+                            <option value="34">34</option>
+                            <option value="35">35</option>
+                            <option value="36">36</option>
+                            <option value="37">37</option>
+                            <option value="38">38</option>
+                            <option value="39">39</option>
+                            <option value="40">40</option>
+                            <option value="41">41</option>
+                            <option value="42">42</option>
+                            <option value="43">43</option>
+                            <option value="44">44</option>
+                            <option value="45">45</option>
+                            <option value="46">46</option>
+                            <option value="47">47</option>
+                            <option value="48">48</option>
+                            <option value="49">49</option>
+                            <option value="50">50</option>
+                            <option value="51">51</option>
+                            <option value="52">52</option>
+                            <option value="53">53</option>
+                            <option value="54">54</option>
+                            <option value="55">55</option>
+                            <option value="56">56</option>
+                            <option value="57">57</option>
+                            <option value="58">58</option>
+                            <option value="59">59</option>
+                            <option value="60">60</option>
+                            <option value="61">61</option>
+                            <option value="62">62</option>
+                            <option value="63">63</option>
+                            <option value="64">64</option>
+                            <option value="65">65</option>
+                            <option value="66">66</option>
+                            <option value="67">67</option>
+                            <option value="68">68</option>
+                            <option value="69">69</option>
+                            <option value="70">70</option>
+                        </select>
+                    </div>
+
+                    <!-- Single Digit Height Input (_ ft, _ in) -->
+                    <div class="form-group">
+                        <label>Height</label>
+                        <div class="height-input-container">
+                            <input type="number" id="height_ft" name="height_ft" min="0" max="9"
+                                oninput="if(this.value.length > 1) this.value = this.value.slice(0, 1);"> ft,
+                            <input type="number" id="height_in" name="height_in" min="0" max="9"
+                                oninput="if(this.value.length > 1) this.value = this.value.slice(0, 1);"> in
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qualification">Highest Qualification</label>
+                        <select id="qualification" name="qualification" onchange="handleQualificationChange()">
+                            <option value="" disabled selected>Select Qualification</option>
+                            <option value="Matriculation / O-Level">Matriculation / O-Level</option>
+                            <option value="Intermediate / A-Level">Intermediate / A-Level</option>
+                            <option value="Diploma / Associate Degree">Diploma / Associate Degree</option>
+                            <option value="Bachelor's Degree (BS / BA / BBA / B.Com)">Bachelor's Degree (BS / BA / BBA / B.Com)</option>
+                            <option value="Master's Degree (MS / MA / MBA / M.Com)">Master's Degree (MS / MA / MBA / M.Com)</option>
+                            <option value="Medical (MBBS / BDS / Pharm-D)">Medical (MBBS / BDS / Pharm-D)</option>
+                            <option value="Engineering (BE / B.Tech)">Engineering (BE / B.Tech)</option>
+                            <option value="Professional (CA / ACCA / ACMA)">Professional (CA / ACCA / ACMA)</option>
+                            <option value="Ph.D. / Doctorate">Ph.D. / Doctorate</option>
+                            <option value="other">Other Qualification</option>
+                        </select>
+                    </div>
+
+                    <!-- Other Qualification Input Field -->
+                    <div class="form-group hidden" id="otherQualificationGroup">
+                        <label for="otherQualification">Describe your Qualification</label>
+                        <input type="text" id="otherQualification" name="otherQualification" placeholder="Describe your Qualification">
+                    </div>
+
+                    <!-- Male Job/Business Dropdown Logic -->
+                    <div class="form-group hidden" id="workTypeGroup">
+                        <label for="workType">Job / Business</label>
+                        <select id="workType" name="workType" onchange="handleWorkTypeChange()">
+                            <option value="" disabled selected>Select Work Type</option>
+                            <option value="job">Job</option>
+                            <option value="business">Business</option>
+                        </select>
+                    </div>
+
+                    <!-- Dynamic Input based on Job or Business -->
+                    <div class="form-group" id="occupationGroup">
+                        <label for="occupation" id="occupationLabel">Occupation / Job Title</label>
+                        <input type="text" id="occupation" name="occupation"
+                            placeholder="e.g. Software Engineer, Business">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Residential area</label>
+                        <input type="text" id="location" name="location" placeholder="Enter your Location">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">Current City / Village</label>
+                        <input type="text" id="city" name="city" placeholder="e.g. Hyderabad, Karachi">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="residence">Residence Type</label>
+                        <select id="residence" name="residence">
+                            <option value="" disabled selected>Select Option</option>
+                            <option value="Own House">Own House</option>
+                            <option value="Rented">Rented</option>
+                        </select>
+                    </div>
+
+                </div>
+            </fieldset>
+
+            <!-- Family Details Fieldset -->
+            <fieldset>
+                <legend>Family Details</legend>
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="parentsStatus">Parents Status</label>
+                        <select id="parentsStatus" name="parentsStatus" onchange="handleParentsStatusChange()">
+                            <option value="" disabled selected>Select Status</option>
+                            <option value="both alive">both alive</option>
+                            <option value="mother alive">mother alive</option>
+                            <option value="father alive">father alive</option>
+                            <option value="passed away">passed away</option>
+                            <option value="divorced">divorced</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fatherOccupation">Father's Occupation</label>
+                        <input type="text" id="fatherOccupation" name="fatherOccupation"
+                            placeholder="Enter father's occupation">
+                    </div>
+
+                    <!-- Mother's Occupation Dropdown -->
+                    <div class="form-group" id="motherOccupationGroup">
+                        <label for="motherOccupation">Mother's Occupation</label>
+                        <select id="motherOccupation" name="motherOccupation" onchange="handleMotherOccupationChange()">
+                            <option value="" disabled selected>Select Occupation</option>
+                            <option value="housewife">housewife</option>
+                            <option value="job">job</option>
+                        </select>
+                    </div>
+
+                    <!-- Dynamic Input for Mother's Job Details -->
+                    <div class="form-group hidden" id="motherJobDetailsGroup">
+                        <label for="motherJobDetails">Describe job</label>
+                        <input type="text" id="motherJobDetails" name="motherJobDetails"
+                            placeholder="e.g. Teacher, Nurse">
+                    </div>
+
+                    <!-- 2-Digit Restricted Inputs -->
+                    <div class="form-group">
+                        <label for="siblingsCount">Siblings</label>
+                        <input type="number" id="siblingsCount" name="siblingsCount" min="0" max="20"
+                            oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2);"
+                            placeholder="e.g. 3">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="siblingsMarriedCount">Siblings married</label>
+                        <input type="number" id="siblingsMarriedCount" name="siblingsMarriedCount" min="0" max="20"
+                            oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2);"
+                            placeholder="e.g. 1">
+                    </div>
+
+                </div>
+            </fieldset>
+
+            <!-- Picture Upload Fieldset -->
+            <fieldset>
+                <legend>Profile Picture</legend>
+                <div class="form-group">
+                    <label for="profilePic">Upload Picture</label>
+                    <input type="file" id="profilePic" accept="image/*" onchange="previewImage(event)">
+                    <img id="imgPreview" class="preview-img hidden" alt="Profile Picture Preview">
+                </div>
+            </fieldset>
+
+            <!-- Two Action Buttons -->
+            <div class="btn-group">
+                <button type="button" class="action-btn copy-btn" onclick="copyProfileText()">
+                    📋 Copy Text
+                </button>
+                <button type="button" class="action-btn share-btn" onclick="shareToWhatsApp()">
+                    📲 Share Profile
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Toast Banner -->
+    <div id="toast" class="toast">Text copied to clipboard!</div>
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const imgPreview = document.getElementById('imgPreview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imgPreview.src = e.target.result;
+                    imgPreview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                imgPreview.src = '';
+                imgPreview.classList.add('hidden');
+            }
+        }
+
+        function handleQualificationChange() {
+            const qualification = document.getElementById('qualification').value;
+            const otherQualificationGroup = document.getElementById('otherQualificationGroup');
+            const otherQualificationInput = document.getElementById('otherQualification');
+
+            if (qualification === 'other') {
+                otherQualificationGroup.classList.remove('hidden');
+            } else {
+                otherQualificationGroup.classList.add('hidden');
+                otherQualificationInput.value = '';
+            }
+        }
+
+        function handleGenderChange() {
+            const gender = document.getElementById('gender').value;
+            const workTypeGroup = document.getElementById('workTypeGroup');
+            const workTypeSelect = document.getElementById('workType');
+            const occupationLabel = document.getElementById('occupationLabel');
+            const occupationInput = document.getElementById('occupation');
+
+            if (gender === 'male') {
+                workTypeGroup.classList.remove('hidden');
+            } else {
+                workTypeGroup.classList.add('hidden');
+                workTypeSelect.value = '';
+                occupationLabel.innerText = "Occupation / Job Title";
+                occupationInput.placeholder = "e.g. Software Engineer, Business";
+            }
+        }
+
+        function handleWorkTypeChange() {
+            const workType = document.getElementById('workType').value;
+            const occupationLabel = document.getElementById('occupationLabel');
+            const occupationInput = document.getElementById('occupation');
+
+            if (workType === 'business') {
+                occupationLabel.innerText = "Describe your business";
+                occupationInput.placeholder = "Enter details about your business";
+            } else {
+                occupationLabel.innerText = "Job title";
+                occupationInput.placeholder = "Enter your job title";
+            }
+        }
+
+        function handleParentsStatusChange() {
+            const parentsStatus = document.getElementById('parentsStatus').value;
+            const motherOccupationGroup = document.getElementById('motherOccupationGroup');
+            const motherOccupationSelect = document.getElementById('motherOccupation');
+            const motherJobDetailsGroup = document.getElementById('motherJobDetailsGroup');
+            const motherJobDetailsInput = document.getElementById('motherJobDetails');
+
+            if (parentsStatus === 'father alive') {
+                motherOccupationGroup.classList.add('hidden');
+                motherOccupationSelect.value = '';
+
+                motherJobDetailsGroup.classList.add('hidden');
+                motherJobDetailsInput.value = '';
+            } else {
+                motherOccupationGroup.classList.remove('hidden');
+            }
+        }
+
+        function handleMotherOccupationChange() {
+            const motherOccupation = document.getElementById('motherOccupation').value;
+            const motherJobDetailsGroup = document.getElementById('motherJobDetailsGroup');
+            const motherJobDetailsInput = document.getElementById('motherJobDetails');
+
+            if (motherOccupation === 'job') {
+                motherJobDetailsGroup.classList.remove('hidden');
+            } else {
+                motherJobDetailsGroup.classList.add('hidden');
+                motherJobDetailsInput.value = '';
+            }
+        }
+
+        function buildFormattedMessage() {
+            const getValue = (id) => document.getElementById(id) ? document.getElementById(id).value.trim() : '';
+
+            const gender = getValue('gender');
+            const fullName = getValue('fullName');
+            const fatherName = getValue('fatherName');
+            const surname = getValue('surname');
+            const maritalStatus = getValue('maritalStatus');
+            const age = getValue('age');
+            const heightFt = getValue('height_ft');
+            const heightIn = getValue('height_in');
+            
+            let qualification = getValue('qualification');
+            if (qualification === 'other') {
+                qualification = getValue('otherQualification') || 'Other';
+            }
+
+            const occupationLabel = document.getElementById('occupationLabel').innerText;
+            const occupation = getValue('occupation');
+            const location = getValue('location');
+            const city = getValue('city');
+            const residence = getValue('residence');
+
+            const parentsStatus = getValue('parentsStatus');
+            const fatherOccupation = getValue('fatherOccupation');
+            const motherOccupation = getValue('motherOccupation');
+            const motherJobDetails = getValue('motherJobDetails');
+            const siblingsCount = getValue('siblingsCount');
+            const siblingsMarriedCount = getValue('siblingsMarriedCount');
+
+            let message = `✧･ﾟ: *✧･ﾟ:* 𝒲𝒶𝒻𝒶 𝒦ℯ ℬ𝒶𝓃𝒹𝒽𝒶𝓃 *:･ﾟ✧*:･ﾟ✧\n`;
+            message += `━━━━━━━━━━━━━━━━━━━━━\n`;
+            message += `📋 *REGISTRATION PROFILE*\n`;
+            message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+            message += `👤 *Personal Details*\n`;
+            if (gender) message += `Gender: *${gender}*\n`;
+            if (fullName) message += `Full Name: *${fullName}*\n`;
+            if (fatherName) message += `Father's Name: *${fatherName}*\n`;
+            if (surname) message += `Surname / Cast: *${surname}*\n`;
+            if (maritalStatus) message += `Marital Status: *${maritalStatus}*\n`;
+            if (age) message += `Age: *${age}*\n`;
+            if (heightFt || heightIn) message += `Height: *${heightFt || 0} ft, ${heightIn || 0} in*\n`;
+            if (qualification) message += `Highest Qualification: *${qualification}*\n`;
+            if (occupation) message += `${occupationLabel}: *${occupation}*\n`;
+            if (location) message += `Residential Area: *${location}*\n`;
+            if (city) message += `City / Village: *${city}*\n`;
+            if (residence) message += `Residence Type: *${residence}*\n`;
+
+            message += `\n👨‍👩‍👧‍👦 *Family Details*\n`;
+            if (parentsStatus) message += `Parents Status: *${parentsStatus}*\n`;
+            if (fatherOccupation) message += `Father's Occupation: *${fatherOccupation}*\n`;
+            if (motherOccupation) message += `Mother's Occupation: *${motherOccupation}*\n`;
+            if (motherJobDetails) message += `Mother's Job Details: *${motherJobDetails}*\n`;
+            if (siblingsCount) message += `Total Siblings: *${siblingsCount}*\n`;
+            if (siblingsMarriedCount) message += `Married Siblings: *${siblingsMarriedCount}*\n`;
+
+            return message;
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.innerText = text;
+            toast.className = "toast show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        async function copyProfileText() {
+            const message = buildFormattedMessage();
+            try {
+                await navigator.clipboard.writeText(message);
+                showToast("Profile text copied to clipboard!");
+            } catch (err) {
+                // Fallback for older devices
+                const textArea = document.createElement("textarea");
+                textArea.value = message;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textArea);
+                showToast("Profile text copied!");
+            }
+        }
+
+        async function shareToWhatsApp() {
+            const message = buildFormattedMessage();
+            const fileInput = document.getElementById('profilePic');
+            const file = fileInput.files[0];
+
+            // Copy text automatically as fallback
+            try {
+                await navigator.clipboard.writeText(message);
+            } catch (err) {}
+
+            // Direct File + Text Share via Web Share API
+            if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Wafa Ke Bandhan Profile',
+                        text: message
+                    });
+                    return;
+                } catch (err) {
+                    console.log("Share cancelled or failed:", err);
+                }
+            }
+
+            // Fallback: Open URL directly with text pre-filled
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+
+</body>
+
+</html>
