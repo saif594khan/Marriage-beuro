@@ -37,7 +37,7 @@
         h1 {
             text-align: center;
             color: #8b0000;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             font-family: 'Great Vibes', cursive;
             font-size: 48px;
             font-weight: normal;
@@ -45,9 +45,10 @@
 
         p.subtitle {
             text-align: center;
-            color: #666;
+            color: #8b0000;
             margin-bottom: 25px;
-            font-size: 14px;
+            font-size: 18px;
+            font-weight: bold;
         }
 
         fieldset {
@@ -94,6 +95,26 @@
         select:focus {
             outline: none;
             border-color: #8b0000;
+        }
+
+        /* Inline Input Counter Container */
+        .inline-counter-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inline-counter-container input[readonly] {
+            flex: 1;
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .inline-counter-container input[type="number"] {
+            width: 65px;
+            text-align: center;
         }
 
         /* Height specific field design */
@@ -180,7 +201,7 @@
             bottom: 30px;
             transform: translateX(-50%);
             font-size: 14px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .toast.show {
@@ -189,26 +210,43 @@
         }
 
         @keyframes fadein {
-            from { bottom: 0; opacity: 0; }
-            to { bottom: 30px; opacity: 1; }
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
         }
 
         @keyframes fadeout {
-            from { bottom: 30px; opacity: 1; }
-            to { bottom: 0; opacity: 0; }
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
         }
 
         @media (max-width: 600px) {
             body {
                 padding: 10px;
             }
+
             .container {
                 padding: 15px;
                 margin: 5px auto;
             }
+
             h1 {
                 font-size: 36px;
             }
+
             .btn-group {
                 grid-template-columns: 1fr;
             }
@@ -220,7 +258,7 @@
 
     <div class="container">
         <h1>Wafa Ke Bandhan</h1>
-        <p class="subtitle">Please fill in your details accurately to help us find a suitable match.</p>
+        <p class="subtitle">Mrs Lodhi</p>
 
         <form id="profileForm" onsubmit="event.preventDefault();">
 
@@ -262,6 +300,33 @@
                             <option value="divorced">Divorced</option>
                             <option value="widowed">Widowed</option>
                         </select>
+                    </div>
+
+                    <!-- Color Complexion Dropdown -->
+                    <div class="form-group">
+                        <label for="colorComplexion">Color Complexion</label>
+                        <select id="colorComplexion" name="colorComplexion">
+                            <option value="" disabled selected>Select Color</option>
+                            <option value="Fair">Fair</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Brown">Brown</option>
+                            <option value="Dark">Dark</option>
+                        </select>
+                    </div>
+
+                    <!-- Disability Dropdown (Default: No) -->
+                    <div class="form-group">
+                        <label for="disability">Disability</label>
+                        <select id="disability" name="disability">
+                            <option value="No" selected>No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+
+                    <!-- Maslak Field -->
+                    <div class="form-group">
+                        <label for="maslak">Maslak</label>
+                        <input type="text" id="maslak" name="maslak" placeholder="Enter Maslak (e.g. Ahle Sunnat, Shia)">
                     </div>
 
                     <div class="form-group">
@@ -414,13 +479,14 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <!-- Father's Occupation Container -->
+                    <div class="form-group" id="fatherOccupationGroup">
                         <label for="fatherOccupation">Father's Occupation</label>
                         <input type="text" id="fatherOccupation" name="fatherOccupation"
                             placeholder="Enter father's occupation">
                     </div>
 
-                    <!-- Mother's Occupation Dropdown -->
+                    <!-- Mother's Occupation Dropdown Container -->
                     <div class="form-group" id="motherOccupationGroup">
                         <label for="motherOccupation">Mother's Occupation</label>
                         <select id="motherOccupation" name="motherOccupation" onchange="handleMotherOccupationChange()">
@@ -437,19 +503,24 @@
                             placeholder="e.g. Teacher, Nurse">
                     </div>
 
-                    <!-- 2-Digit Restricted Inputs -->
+                    <!-- Brothers Input Block (Locked Text + 2-digit Counter, Default: 0) -->
                     <div class="form-group">
-                        <label for="siblingsCount">Siblings</label>
-                        <input type="number" id="siblingsCount" name="siblingsCount" min="0" max="20"
-                            oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2);"
-                            placeholder="e.g. 3">
+                        <label>Brothers</label>
+                        <div class="inline-counter-container">
+                            <input type="text" value="brother" readonly tabIndex="-1">
+                            <input type="number" id="brothersCount" name="brothersCount" value="0" min="0" max="99"
+                                oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2);">
+                        </div>
                     </div>
 
+                    <!-- Sisters Input Block (Locked Text + 2-digit Counter, Default: 0) -->
                     <div class="form-group">
-                        <label for="siblingsMarriedCount">Siblings married</label>
-                        <input type="number" id="siblingsMarriedCount" name="siblingsMarriedCount" min="0" max="20"
-                            oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2);"
-                            placeholder="e.g. 1">
+                        <label>Sisters</label>
+                        <div class="inline-counter-container">
+                            <input type="text" value="sister" readonly tabIndex="-1">
+                            <input type="number" id="sistersCount" name="sistersCount" value="0" min="0" max="99"
+                                oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2);">
+                        </div>
                     </div>
 
                 </div>
@@ -482,210 +553,233 @@
     <div id="toast" class="toast">Text copied to clipboard!</div>
 
     <script>
-    function previewImage(event) {
-        const file = event.target.files[0];
-        const imgPreview = document.getElementById('imgPreview');
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                imgPreview.src = e.target.result;
-                imgPreview.classList.remove('hidden');
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const imgPreview = document.getElementById('imgPreview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imgPreview.src = e.target.result;
+                    imgPreview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                imgPreview.src = '';
+                imgPreview.classList.add('hidden');
             }
-            reader.readAsDataURL(file);
-        } else {
-            imgPreview.src = '';
-            imgPreview.classList.add('hidden');
         }
-    }
 
-    function handleQualificationChange() {
-        const qualification = document.getElementById('qualification').value;
-        const otherQualificationGroup = document.getElementById('otherQualificationGroup');
-        const otherQualificationInput = document.getElementById('otherQualification');
+        function handleQualificationChange() {
+            const qualification = document.getElementById('qualification').value;
+            const otherQualificationGroup = document.getElementById('otherQualificationGroup');
+            const otherQualificationInput = document.getElementById('otherQualification');
 
-        if (qualification === 'other') {
-            otherQualificationGroup.classList.remove('hidden');
-        } else {
-            otherQualificationGroup.classList.add('hidden');
-            otherQualificationInput.value = '';
+            if (qualification === 'other') {
+                otherQualificationGroup.classList.remove('hidden');
+            } else {
+                otherQualificationGroup.classList.add('hidden');
+                otherQualificationInput.value = '';
+            }
         }
-    }
 
-    function handleGenderChange() {
-        const gender = document.getElementById('gender').value;
-        const workTypeGroup = document.getElementById('workTypeGroup');
-        const workTypeSelect = document.getElementById('workType');
-        const occupationLabel = document.getElementById('occupationLabel');
-        const occupationInput = document.getElementById('occupation');
+        function handleGenderChange() {
+            const gender = document.getElementById('gender').value;
+            const workTypeGroup = document.getElementById('workTypeGroup');
+            const workTypeSelect = document.getElementById('workType');
+            const occupationLabel = document.getElementById('occupationLabel');
+            const occupationInput = document.getElementById('occupation');
 
-        if (gender === 'male') {
-            workTypeGroup.classList.remove('hidden');
-        } else {
-            workTypeGroup.classList.add('hidden');
-            workTypeSelect.value = '';
-            occupationLabel.innerText = "Occupation / Job Title";
-            occupationInput.placeholder = "e.g. Software Engineer, Business";
+            if (gender === 'male') {
+                workTypeGroup.classList.remove('hidden');
+            } else {
+                workTypeGroup.classList.add('hidden');
+                workTypeSelect.value = '';
+                occupationLabel.innerText = "Occupation / Job Title";
+                occupationInput.placeholder = "e.g. Software Engineer, Business";
+            }
         }
-    }
 
-    function handleWorkTypeChange() {
-        const workType = document.getElementById('workType').value;
-        const occupationLabel = document.getElementById('occupationLabel');
-        const occupationInput = document.getElementById('occupation');
+        function handleWorkTypeChange() {
+            const workType = document.getElementById('workType').value;
+            const occupationLabel = document.getElementById('occupationLabel');
+            const occupationInput = document.getElementById('occupation');
 
-        if (workType === 'business') {
-            occupationLabel.innerText = "Describe your business";
-            occupationInput.placeholder = "Enter details about your business";
-        } else {
-            occupationLabel.innerText = "Job title";
-            occupationInput.placeholder = "Enter your job title";
+            if (workType === 'business') {
+                occupationLabel.innerText = "Describe your business";
+                occupationInput.placeholder = "Enter details about your business";
+            } else {
+                occupationLabel.innerText = "Job title";
+                occupationInput.placeholder = "Enter your job title";
+            }
         }
-    }
 
-    function handleParentsStatusChange() {
-        const parentsStatus = document.getElementById('parentsStatus').value;
-        const motherOccupationGroup = document.getElementById('motherOccupationGroup');
-        const motherOccupationSelect = document.getElementById('motherOccupation');
-        const motherJobDetailsGroup = document.getElementById('motherJobDetailsGroup');
-        const motherJobDetailsInput = document.getElementById('motherJobDetails');
+        function handleParentsStatusChange() {
+            const parentsStatus = document.getElementById('parentsStatus').value;
+            const fatherOccupationGroup = document.getElementById('fatherOccupationGroup');
+            const fatherOccupationInput = document.getElementById('fatherOccupation');
+            const motherOccupationGroup = document.getElementById('motherOccupationGroup');
+            const motherOccupationSelect = document.getElementById('motherOccupation');
+            const motherJobDetailsGroup = document.getElementById('motherJobDetailsGroup');
+            const motherJobDetailsInput = document.getElementById('motherJobDetails');
 
-        if (parentsStatus === 'father alive') {
+            // Reset dynamic fields initially
+            fatherOccupationGroup.classList.add('hidden');
             motherOccupationGroup.classList.add('hidden');
-            motherOccupationSelect.value = '';
-
             motherJobDetailsGroup.classList.add('hidden');
-            motherJobDetailsInput.value = '';
-        } else {
-            motherOccupationGroup.classList.remove('hidden');
-        }
-    }
 
-    function handleMotherOccupationChange() {
-        const motherOccupation = document.getElementById('motherOccupation').value;
-        const motherJobDetailsGroup = document.getElementById('motherJobDetailsGroup');
-        const motherJobDetailsInput = document.getElementById('motherJobDetails');
-
-        if (motherOccupation === 'job') {
-            motherJobDetailsGroup.classList.remove('hidden');
-        } else {
-            motherJobDetailsGroup.classList.add('hidden');
-            motherJobDetailsInput.value = '';
-        }
-    }
-
-    function buildFormattedMessage() {
-        const getValue = (id) => document.getElementById(id) ? document.getElementById(id).value.trim() : '';
-
-        const gender = getValue('gender');
-        const fullName = getValue('fullName');
-        const fatherName = getValue('fatherName');
-        const surname = getValue('surname');
-        const maritalStatus = getValue('maritalStatus');
-        const age = getValue('age');
-        const heightFt = getValue('height_ft');
-        const heightIn = getValue('height_in');
-        
-        let qualification = getValue('qualification');
-        if (qualification === 'other') {
-            qualification = getValue('otherQualification') || 'Other';
-        }
-
-        const occupationLabel = document.getElementById('occupationLabel').innerText;
-        const occupation = getValue('occupation');
-        const location = getValue('location');
-        const city = getValue('city');
-        const residence = getValue('residence');
-
-        const parentsStatus = getValue('parentsStatus');
-        const fatherOccupation = getValue('fatherOccupation');
-        const motherOccupation = getValue('motherOccupation');
-        const motherJobDetails = getValue('motherJobDetails');
-        const siblingsCount = getValue('siblingsCount');
-        const siblingsMarriedCount = getValue('siblingsMarriedCount');
-
-        let message = `✧･ﾟ: *✧･ﾟ:* 𝒲𝒶𝒻𝒶 𝒦ℯ ℬ𝒶𝓃𝒹𝒽𝒶𝓃 *:･ﾟ✧*:･ﾟ✧\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `📋 *REGISTRATION PROFILE*\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-        message += `👤 *Personal Details*\n`;
-        if (gender) message += `Gender: *${gender}*\n`;
-        if (fullName) message += `Full Name: *${fullName}*\n`;
-        if (fatherName) message += `Father's Name: *${fatherName}*\n`;
-        if (surname) message += `Surname / Cast: *${surname}*\n`;
-        if (maritalStatus) message += `Marital Status: *${maritalStatus}*\n`;
-        if (age) message += `Age: *${age}*\n`;
-        if (heightFt || heightIn) message += `Height: *${heightFt || 0} ft, ${heightIn || 0} in*\n`;
-        if (qualification) message += `Highest Qualification: *${qualification}*\n`;
-        if (occupation) message += `${occupationLabel}: *${occupation}*\n`;
-        if (location) message += `Residential Area: *${location}*\n`;
-        if (city) message += `City / Village: *${city}*\n`;
-        if (residence) message += `Residence Type: *${residence}*\n`;
-
-        message += `\n👨‍👩‍👧‍👦 *Family Details*\n`;
-        if (parentsStatus) message += `Parents Status: *${parentsStatus}*\n`;
-        if (fatherOccupation) message += `Father's Occupation: *${fatherOccupation}*\n`;
-        if (motherOccupation) message += `Mother's Occupation: *${motherOccupation}*\n`;
-        if (motherJobDetails) message += `Mother's Job Details: *${motherJobDetails}*\n`;
-        if (siblingsCount) message += `Total Siblings: *${siblingsCount}*\n`;
-        if (siblingsMarriedCount) message += `Married Siblings: *${siblingsMarriedCount}*\n`;
-
-        return message;
-    }
-
-    function showToast(text) {
-        const toast = document.getElementById('toast');
-        toast.innerText = text;
-        toast.className = "toast show";
-        setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-    }
-
-    async function copyProfileText() {
-        const message = buildFormattedMessage();
-        try {
-            await navigator.clipboard.writeText(message);
-            showToast("Profile text copied to clipboard!");
-        } catch (err) {
-            const textArea = document.createElement("textarea");
-            textArea.value = message;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textArea);
-            showToast("Profile text copied!");
-        }
-    }
-
-    async function shareToWhatsApp() {
-        const message = buildFormattedMessage();
-        const fileInput = document.getElementById('profilePic');
-        const file = fileInput.files ? fileInput.files[0] : null;
-
-        // Copy profile text to clipboard first as a reliable backup
-        try {
-            await navigator.clipboard.writeText(message);
-        } catch (err) {}
-
-        // IF AN IMAGE IS ATTACHED: Use native Web Share API for the image file
-        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-                showToast("Text copied! Paste it in WhatsApp caption.");
-                await navigator.share({
-                    files: [file],
-                    title: 'Wafa Ke Bandhan Profile'
-                });
-                return;
-            } catch (err) {
-                console.log("Share cancelled or failed:", err);
+            if (parentsStatus === 'both alive') {
+                fatherOccupationGroup.classList.remove('hidden');
+                motherOccupationGroup.classList.remove('hidden');
+            } else if (parentsStatus === 'father alive') {
+                fatherOccupationGroup.classList.remove('hidden');
+                motherOccupationSelect.value = '';
+                motherJobDetailsInput.value = '';
+            } else if (parentsStatus === 'mother alive') {
+                fatherOccupationInput.value = '';
+                motherOccupationGroup.classList.remove('hidden');
+            } else {
+                // passed away / divorced -> hide both
+                fatherOccupationInput.value = '';
+                motherOccupationSelect.value = '';
+                motherJobDetailsInput.value = '';
             }
         }
 
-        // IF NO IMAGE IS ATTACHED (or share failed): Use direct WhatsApp web API
-        // This guarantees text is pre-filled without any empty message error!
-        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
-    }
-</script>
+        function handleMotherOccupationChange() {
+            const motherOccupation = document.getElementById('motherOccupation').value;
+            const motherJobDetailsGroup = document.getElementById('motherJobDetailsGroup');
+            const motherJobDetailsInput = document.getElementById('motherJobDetails');
+
+            if (motherOccupation === 'job') {
+                motherJobDetailsGroup.classList.remove('hidden');
+            } else {
+                motherJobDetailsGroup.classList.add('hidden');
+                motherJobDetailsInput.value = '';
+            }
+        }
+
+        function buildFormattedMessage() {
+            const getValue = (id) => document.getElementById(id) ? document.getElementById(id).value.trim() : '';
+
+            const gender = getValue('gender');
+            const fullName = getValue('fullName');
+            const fatherName = getValue('fatherName');
+            const surname = getValue('surname');
+            const maritalStatus = getValue('maritalStatus');
+            const colorComplexion = getValue('colorComplexion');
+            const disability = getValue('disability');
+            const maslak = getValue('maslak');
+            const age = getValue('age');
+            const heightFt = getValue('height_ft');
+            const heightIn = getValue('height_in');
+            
+            let qualification = getValue('qualification');
+            if (qualification === 'other') {
+                qualification = getValue('otherQualification') || 'Other';
+            }
+
+            const occupationLabel = document.getElementById('occupationLabel').innerText;
+            const occupation = getValue('occupation');
+            const location = getValue('location');
+            const city = getValue('city');
+            const residence = getValue('residence');
+
+            const parentsStatus = getValue('parentsStatus');
+            const fatherOccupation = getValue('fatherOccupation');
+            const motherOccupation = getValue('motherOccupation');
+            const motherJobDetails = getValue('motherJobDetails');
+            const brothersCount = getValue('brothersCount') || '0';
+            const sistersCount = getValue('sistersCount') || '0';
+
+            let message = `✧･ﾟ: *✧･ﾟ:* 𝒲𝒶𝒻𝒶 𝒦ℯ ℬ𝒶𝓃𝒹𝒽𝒶𝓃 *:･ﾟ✧*:･ﾟ✧\n`;
+            message += `👑 *Mrs Lodhi*\n`;
+            message += `━━━━━━━━━━━━━━━━━━━━━\n`;
+            message += `📋 *REGISTRATION PROFILE*\n`;
+            message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+            message += `👤 *Personal Details*\n`;
+            if (gender) message += `Gender: *${gender}*\n`;
+            if (fullName) message += `Full Name: *${fullName}*\n`;
+            if (fatherName) message += `Father's Name: *${fatherName}*\n`;
+            if (surname) message += `Surname / Cast: *${surname}*\n`;
+            if (maritalStatus) message += `Marital Status: *${maritalStatus}*\n`;
+            if (colorComplexion) message += `Color Complexion: *${colorComplexion}*\n`;
+            if (disability) message += `Disability: *${disability}*\n`;
+            if (maslak) message += `Maslak: *${maslak}*\n`;
+            if (age) message += `Age: *${age}*\n`;
+            if (heightFt || heightIn) message += `Height: *${heightFt || 0} ft, ${heightIn || 0} in*\n`;
+            if (qualification) message += `Highest Qualification: *${qualification}*\n`;
+            if (occupation) message += `${occupationLabel}: *${occupation}*\n`;
+            if (location) message += `Residential Area: *${location}*\n`;
+            if (city) message += `City / Village: *${city}*\n`;
+            if (residence) message += `Residence Type: *${residence}*\n`;
+
+            message += `\n👨‍👩‍👧‍👦 *Family Details*\n`;
+            if (parentsStatus) message += `Parents Status: *${parentsStatus}*\n`;
+            if (fatherOccupation && (parentsStatus === 'both alive' || parentsStatus === 'father alive')) {
+                message += `Father's Occupation: *${fatherOccupation}*\n`;
+            }
+            if (motherOccupation && (parentsStatus === 'both alive' || parentsStatus === 'mother alive')) {
+                message += `Mother's Occupation: *${motherOccupation}*\n`;
+            }
+            if (motherJobDetails && motherOccupation === 'job') {
+                message += `Mother's Job Details: *${motherJobDetails}*\n`;
+            }
+            message += `Brothers: *${brothersCount}*\n`;
+            message += `Sisters: *${sistersCount}*\n`;
+
+            return message;
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.innerText = text;
+            toast.className = "toast show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        async function copyProfileText() {
+            const message = buildFormattedMessage();
+            try {
+                await navigator.clipboard.writeText(message);
+                showToast("Profile text copied to clipboard!");
+            } catch (err) {
+                const textArea = document.createElement("textarea");
+                textArea.value = message;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textArea);
+                showToast("Profile text copied!");
+            }
+        }
+
+        async function shareToWhatsApp() {
+            const message = buildFormattedMessage();
+            const fileInput = document.getElementById('profilePic');
+            const file = fileInput.files ? fileInput.files[0] : null;
+
+            try {
+                await navigator.clipboard.writeText(message);
+            } catch (err) {}
+
+            if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    showToast("Text copied! Paste it in WhatsApp caption.");
+                    await navigator.share({
+                        files: [file],
+                        title: 'Wafa Ke Bandhan Profile'
+                    });
+                    return;
+                } catch (err) {
+                    console.log("Share cancelled or failed:", err);
+                }
+            }
+
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
 
 </body>
 
