@@ -440,6 +440,12 @@
                             placeholder="e.g. Software Engineer, Business">
                     </div>
 
+                    <!-- Dynamic Salary / Income Field -->
+                    <div class="form-group hidden" id="financialIncomeGroup">
+                        <label for="financialIncome" id="financialIncomeLabel">Salary</label>
+                        <input type="text" id="financialIncome" name="financialIncome" placeholder="Enter amount">
+                    </div>
+
                     <div class="form-group">
                         <label for="location">Residential area</label>
                         <input type="text" id="location" name="location" placeholder="Enter your Location">
@@ -503,22 +509,29 @@
                             placeholder="e.g. Teacher, Nurse">
                     </div>
 
-                    <!-- Brothers Input Block (Locked Text + 2-digit Counter, Default: 0) -->
+                    <!-- Total Siblings Input (2-digit Number) -->
                     <div class="form-group">
-                        <label>Brothers</label>
+                        <label for="totalSiblings">Total Siblings</label>
+                        <input type="number" id="totalSiblings" name="totalSiblings" placeholder="00" min="0" max="99"
+                            oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2);">
+                    </div>
+
+                    <!-- Married Brothers Input Block -->
+                    <div class="form-group">
+                        <label>Married Brothers</label>
                         <div class="inline-counter-container">
-                            <input type="text" value="brother" readonly tabIndex="-1">
-                            <input type="number" id="brothersCount" name="brothersCount" value="0" min="0" max="99"
+                            <input type="text" value="married brother" readonly tabIndex="-1">
+                            <input type="number" id="brothersCount" name="brothersCount" value="0" min="0" max="20"
                                 oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2);">
                         </div>
                     </div>
 
-                    <!-- Sisters Input Block (Locked Text + 2-digit Counter, Default: 0) -->
+                    <!-- Married Sisters Input Block -->
                     <div class="form-group">
-                        <label>Sisters</label>
+                        <label>Married Sisters</label>
                         <div class="inline-counter-container">
-                            <input type="text" value="sister" readonly tabIndex="-1">
-                            <input type="number" id="sistersCount" name="sistersCount" value="0" min="0" max="99"
+                            <input type="text" value="married sister" readonly tabIndex="-1">
+                            <input type="number" id="sistersCount" name="sistersCount" value="0" min="0" max="20"
                                 oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2);">
                         </div>
                     </div>
@@ -588,11 +601,25 @@
             const workTypeSelect = document.getElementById('workType');
             const occupationLabel = document.getElementById('occupationLabel');
             const occupationInput = document.getElementById('occupation');
+            const financialIncomeGroup = document.getElementById('financialIncomeGroup');
+            const financialIncomeLabel = document.getElementById('financialIncomeLabel');
 
-            if (gender === 'male') {
+            if (gender === 'female') {
+                workTypeGroup.classList.add('hidden');
+                workTypeSelect.value = '';
+                occupationLabel.innerText = "Occupation / Job Title";
+                occupationInput.placeholder = "e.g. Software Engineer, Teacher";
+                
+                // Show Salary for Female
+                financialIncomeGroup.classList.remove('hidden');
+                financialIncomeLabel.innerText = "Salary";
+            } else if (gender === 'male') {
                 workTypeGroup.classList.remove('hidden');
+                // Call handleWorkTypeChange to correctly evaluate current work type
+                handleWorkTypeChange();
             } else {
                 workTypeGroup.classList.add('hidden');
+                financialIncomeGroup.classList.add('hidden');
                 workTypeSelect.value = '';
                 occupationLabel.innerText = "Occupation / Job Title";
                 occupationInput.placeholder = "e.g. Software Engineer, Business";
@@ -600,16 +627,24 @@
         }
 
         function handleWorkTypeChange() {
+            const gender = document.getElementById('gender').value;
             const workType = document.getElementById('workType').value;
             const occupationLabel = document.getElementById('occupationLabel');
             const occupationInput = document.getElementById('occupation');
+            const financialIncomeGroup = document.getElementById('financialIncomeGroup');
+            const financialIncomeLabel = document.getElementById('financialIncomeLabel');
 
-            if (workType === 'business') {
-                occupationLabel.innerText = "Describe your business";
-                occupationInput.placeholder = "Enter details about your business";
-            } else {
-                occupationLabel.innerText = "Job title";
-                occupationInput.placeholder = "Enter your job title";
+            if (gender === 'male') {
+                financialIncomeGroup.classList.remove('hidden');
+                if (workType === 'business') {
+                    occupationLabel.innerText = "Describe your business";
+                    occupationInput.placeholder = "Enter details about your business";
+                    financialIncomeLabel.innerText = "Income";
+                } else {
+                    occupationLabel.innerText = "Job title";
+                    occupationInput.placeholder = "Enter your job title";
+                    financialIncomeLabel.innerText = "Salary";
+                }
             }
         }
 
@@ -680,6 +715,8 @@
 
             const occupationLabel = document.getElementById('occupationLabel').innerText;
             const occupation = getValue('occupation');
+            const financialIncomeLabel = document.getElementById('financialIncomeLabel').innerText;
+            const financialIncome = getValue('financialIncome');
             const location = getValue('location');
             const city = getValue('city');
             const residence = getValue('residence');
@@ -688,6 +725,7 @@
             const fatherOccupation = getValue('fatherOccupation');
             const motherOccupation = getValue('motherOccupation');
             const motherJobDetails = getValue('motherJobDetails');
+            const totalSiblings = getValue('totalSiblings');
             const brothersCount = getValue('brothersCount') || '0';
             const sistersCount = getValue('sistersCount') || '0';
 
@@ -710,6 +748,7 @@
             if (heightFt || heightIn) message += `Height: *${heightFt || 0} ft, ${heightIn || 0} in*\n`;
             if (qualification) message += `Highest Qualification: *${qualification}*\n`;
             if (occupation) message += `${occupationLabel}: *${occupation}*\n`;
+            if (financialIncome) message += `${financialIncomeLabel}: *${financialIncome}*\n`;
             if (location) message += `Residential Area: *${location}*\n`;
             if (city) message += `City / Village: *${city}*\n`;
             if (residence) message += `Residence Type: *${residence}*\n`;
@@ -725,8 +764,9 @@
             if (motherJobDetails && motherOccupation === 'job') {
                 message += `Mother's Job Details: *${motherJobDetails}*\n`;
             }
-            message += `Brothers: *${brothersCount}*\n`;
-            message += `Sisters: *${sistersCount}*\n`;
+            if (totalSiblings) message += `Total Siblings: *${totalSiblings}*\n`;
+            message += `Married Brothers: *${brothersCount}*\n`;
+            message += `Married Sisters: *${sistersCount}*\n`;
 
             return message;
         }
